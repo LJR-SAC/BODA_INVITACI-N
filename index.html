@@ -24,7 +24,13 @@
     font-family:'Montserrat', sans-serif;
     font-weight:300;
     line-height:1.7;
+    overflow-x: hidden;
   }
+  /* Bloquear el scroll mientras el sobre esté visible */
+  body.locked {
+    overflow: hidden;
+  }
+  
   .page{
     max-width:520px;
     margin:0 auto;
@@ -45,6 +51,130 @@
   section{
     padding:64px 32px;
     text-align:center;
+  }
+
+  /* Animación del Sobre */
+  #envelope-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--beige);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 1s ease-in-out, visibility 1s;
+  }
+  #envelope-wrapper.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .envelope-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .envelope-text {
+    margin-bottom: 20px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    color: var(--gold-deep);
+    animation: pulse 2s infinite;
+    cursor: default;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+  .envelope {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    background: #e4cc9f;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+  }
+  .envelope:hover {
+    transform: translateY(-5px);
+  }
+  /* Solapas del sobre */
+  .top-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-top: 110px solid var(--gold);
+    transform-origin: top;
+    transition: transform 0.7s ease-in-out, z-index 0.2s;
+    z-index: 4;
+  }
+  .left-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-top: 100px solid transparent;
+    border-bottom: 100px solid transparent;
+    border-left: 150px solid #d4b373;
+    z-index: 2;
+  }
+  .right-flap {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-top: 100px solid transparent;
+    border-bottom: 100px solid transparent;
+    border-right: 150px solid #d4b373;
+    z-index: 2;
+  }
+  .bottom-flap {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-bottom: 110px solid #c8a45e;
+    z-index: 3;
+  }
+  .seal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 45px;
+    height: 45px;
+    background: var(--ink);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 20px;
+    z-index: 5;
+    transition: opacity 0.4s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  }
+  /* Estado abierto */
+  .envelope.open .top-flap {
+    transform: rotateX(180deg);
+    z-index: 1; /* Se va hacia atrás para revelar el interior */
+  }
+  .envelope.open .seal {
+    opacity: 0;
   }
 
   /* Hero */
@@ -185,15 +315,33 @@
     font-size:12px;
     letter-spacing:1px;
   }
+  .qr{
+    width:160px;
+    height:160px;
+  }
 
   @media (prefers-reduced-motion: reduce){
     html{ scroll-behavior:auto; }
   }
 </style>
 </head>
-<body>
-<div class="page">
+<body class="locked">
 
+<!-- ANIMACIÓN DEL SOBRE -->
+<div id="envelope-wrapper">
+  <div class="envelope-container">
+    <div class="envelope-text">Toca para abrir</div>
+    <div class="envelope" id="envelope">
+      <div class="left-flap"></div>
+      <div class="right-flap"></div>
+      <div class="bottom-flap"></div>
+      <div class="top-flap"></div>
+      <div class="seal">V&A</div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
   <!-- HERO + CUENTA REGRESIVA -->
   <section class="hero">
     <span class="monogram">Nos casamos</span>
@@ -207,7 +355,10 @@
       <div class="unit"><div class="num" id="cd-secs">00</div><div class="label">Seg.</div></div>
     </div>
   </section>
-
+  <section class="video-section">
+    <video src="BODA3.mp4" id="videoBoda3" controls playsinline style="display: none; width: 100%; height: auto; max-height: 500px; border-radius: 8px; margin-bottom: 15px;"></video>
+    <button class="btn" id="mostrarVideo">Ver Video</button>
+  </section>
   <!-- CONFIRMACIÓN -->
   <section class="confirm">
     <h2 class="serif">Confirma tu asistencia</h2>
@@ -247,7 +398,7 @@
     <div class="divider"></div>
     <p>Si tomaste fotos durante el evento, puedes subirlas aquí</p>
     <div class="palette">
-      <img src="Untitled design.png" alt="QR">
+      <img class="qr" src="Untitled design.png" alt="QR">
     </div>
     <a class="btn" href="https://photos.app.goo.gl/QQKvjLSgDonXfe7s7" target="_blank" rel="noopener">Subir fotos</a>
   </section>
@@ -259,6 +410,23 @@
 </div>
 
 <script>
+  // LÓGICA DEL SOBRE
+  document.addEventListener("DOMContentLoaded", () => {
+    const envelopeWrapper = document.getElementById("envelope-wrapper");
+    const envelope = document.getElementById("envelope");
+
+    envelope.addEventListener("click", () => {
+      // 1. Abrir la solapa
+      envelope.classList.add("open");
+      
+      // 2. Esperar a que termine la animación de la solapa (700ms) y desvanecer todo
+      setTimeout(() => {
+        envelopeWrapper.classList.add("hidden");
+        document.body.classList.remove("locked"); // Permitir hacer scroll
+      }, 900);
+    });
+  });
+
   // Fecha y hora del evento (ajusta la hora si lo necesitas)
   const eventDate = new Date("2026-11-14T17:00:00");
 
@@ -269,7 +437,7 @@
 
   function pad(n){ return String(n).padStart(2, "0"); }
 
-  function updateCountdown(){
+function updateCountdown(){
     const now = new Date();
     let diff = eventDate - now;
 
@@ -298,6 +466,18 @@
 
   updateCountdown();
   const timer = setInterval(updateCountdown, 1000);
+// LÓGICA DEL VIDEO
+  const boton = document.getElementById('mostrarVideo');
+  const video = document.getElementById('videoBoda3');
+
+  boton.addEventListener('click', function() {
+    // Muestra el video
+    video.style.display = 'block';
+    // Oculta el botón después de presionarlo (opcional, pero recomendado)
+    boton.style.display = 'none';
+    // Reproduce el video automáticamente
+    video.play();
+  });
 </script>
 </body>
 </html>
