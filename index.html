@@ -6,8 +6,14 @@
 <title>Viviana & Alex — 14 de noviembre 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500&family=Pinyon+Script&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
 <style>
+  /* Amsterdam Four (comercial): si tienes el archivo, ponlo junto a este HTML como AmsterdamFour.ttf */
+  @font-face{
+    font-family:'Amsterdam Four';
+    src:local('Amsterdam Four'), local('AmsterdamFour'), url('AmsterdamFour.ttf') format('truetype');
+    font-display:swap;
+  }
   :root{
     --white:#ffffff;
     --paper:#fbf8f1;
@@ -18,6 +24,7 @@
     --ink:#332b22;
     --ink-soft:#7a6e5c;
     --script:'Pinyon Script', 'Cormorant Garamond', cursive;
+    --names:'Amsterdam Four', 'Mrs Saint Delafield', 'Pinyon Script', cursive;
     --serif:'Cormorant Garamond', Georgia, serif;
     --sans:'Montserrat', system-ui, sans-serif;
   }
@@ -122,6 +129,18 @@
     flex-direction:column;
     align-items:center;
   }
+  .guest-name{
+    min-width:240px;
+    margin-bottom:18px;
+    padding:6px 18px 8px;
+    border-bottom:1px solid var(--gold);
+    font-family:var(--serif);
+    font-size:24px;
+    font-style:italic;
+    color:var(--gold-deep);
+    text-align:center;
+    line-height:1.2;
+  }
   .envelope-to{
     font-family:var(--script);
     font-size:40px;
@@ -218,7 +237,7 @@
   }
   .hero .eyebrow{ margin-bottom:0; }
   .hero h1{
-    font-family:var(--script);
+    font-family:var(--names);
     font-weight:400;
     font-size:clamp(64px, 19vw, 96px);
     line-height:1;
@@ -305,7 +324,7 @@
   .message .signature{
     display:block;
     margin-top:22px;
-    font-family:var(--script);
+    font-family:var(--names);
     font-size:32px;
     color:var(--gold-deep);
   }
@@ -356,7 +375,7 @@
     background:rgba(241,227,196,0.12);
   }
   .video-cover .cover-script{
-    font-family:var(--script);
+    font-family:var(--names);
     font-size:38px;
     line-height:1;
   }
@@ -490,7 +509,7 @@
     color:#d8c9aa;
   }
   footer .names{
-    font-family:var(--script);
+    font-family:var(--names);
     font-size:46px;
     line-height:1.1;
     color:#f1e3c4;
@@ -559,6 +578,7 @@
 <!-- ANIMACIÓN DEL SOBRE -->
 <div id="envelope-wrapper">
   <div class="envelope-container">
+    <div class="guest-name" id="guestName">Nombre de invitado</div>
     <div class="envelope-to">Estás invitado</div>
     <div class="envelope-text">Toca el sello para abrir</div>
     <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Abrir invitación">
@@ -608,7 +628,7 @@
   <!-- 3. NUESTRA HISTORIA (VIDEO) -->
   <section class="tinted reveal">
     <span class="eyebrow">Un pequeño adelanto</span>
-    <h2 class="section-title">Nuestra historia</h2>
+    <h2 class="section-title">Al gran evento</h2>
     <svg class="ornament" aria-hidden="true"><use href="#orn"/></svg>
     <div class="video-card">
       <video src="BODA5.mp4" id="videoBoda3" controls playsinline preload="metadata" hidden></video>
@@ -624,7 +644,7 @@
 
   <!-- 4. EL GRAN DÍA -->
   <section class="reveal">
-    <span class="eyebrow">Cuándo y dónde</span>
+    <span class="eyebrow">¿Cuándo y dónde?</span>
     <h2 class="section-title">El gran día</h2>
     <svg class="ornament" aria-hidden="true"><use href="#orn"/></svg>
 
@@ -635,13 +655,13 @@
     </div>
 
     <div class="event">
+      <p>Boulevard Austriaco 33-18 Ramblas de Cayalá Salón Jazmín, Club la Reserva</p> 
       <svg class="icon" width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
         <path d="M11 4h12l-2 10a4 4 0 0 1-8 0z" fill="none" stroke="currentColor" stroke-width="1.2"/>
         <path d="M17 18v11M12 29h10" stroke="currentColor" stroke-width="1.2" fill="none"/>
       </svg>
       <h3>Recepción seguida de la ceremonia</h3>
-      <p>A partir de las 16:00 hrs</p>
-      <a class="btn" href="https://waze.com/ul/h9fxehgt4r" target="_blank" rel="noopener">
+      <a class="btn" href="https://waze.com/ul/h9fxehgum9" target="_blank" rel="noopener">
         <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1a4.5 4.5 0 0 0-4.5 4.5C2.5 9 7 13 7 13s4.5-4 4.5-7.5A4.5 4.5 0 0 0 7 1zm0 6.2a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4z" fill="currentColor"/></svg>
         Cómo llegar
       </a>
@@ -692,6 +712,10 @@
 </button>
 
 <script>
+  // Nombre del invitado desde el enlace: invitacion.html?invitado=Familia%20Pérez
+  const invitado = new URLSearchParams(location.search).get("invitado");
+  if (invitado) document.getElementById("guestName").textContent = invitado;
+
   const music = document.getElementById("bgMusic");
   const musicBtn = document.getElementById("musicToggle");
 
